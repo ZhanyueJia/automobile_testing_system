@@ -1,0 +1,138 @@
+# ============================================================
+# 测试运行配置 - Test Configuration
+# ============================================================
+
+test:
+  # 默认超时 (秒)
+  default_timeout: 60
+  # 默认重试次数
+  default_retries: 2
+  # 重试间隔 (秒)
+  retry_interval: 3
+  # 报告输出目录
+  report_dir: "reports"
+  # 日志级别
+  log_level: "INFO"
+  # 截图保存路径
+  screenshot_dir: "reports/screenshots"
+  # 是否在失败时自动截图
+  screenshot_on_failure: true
+
+# 智能座舱测试配置
+cockpit:
+  voice:
+    # 唤醒率测试参数
+    wakeup:
+      min_pass_rate: 0.95        # 最低唤醒率要求 ≥95%
+      test_rounds: 100            # 每轮测试次数
+      wakeup_timeout: 3.0         # 唤醒超时时间 (秒)
+      interval_between_tests: 2.0 # 两次测试间的间隔 (秒)
+      audio_source_dir: "data/test_data/functional_tests/voice/wakeup_audio"
+      noise_levels_db: [40, 50, 60, 70, 80]   # 测试噪声环境 (dB)
+      distance_m: [0.5, 1.0, 1.5, 2.0]        # 测试距离 (m)
+      zones: ["driver", "passenger", "rear_left", "rear_right"]
+    # 多音区识别
+    multi_zone:
+      tolerance_angle: 15         # 音区角度容差 (度)
+    # 抗噪测试
+    noise_robustness:
+      noise_types: ["wind", "tire", "music", "conversation"]
+      speed_ranges_kmh: [60, 80, 100, 120]
+
+  # 多屏联动
+  multi_screen:
+    sync_latency_max_ms: 100      # 最大同步延迟
+
+  # OTA
+  ota:
+    download_timeout: 600
+    install_timeout: 1200
+    package_sizes_mb: [50, 200, 500, 1024, 2048]
+    server_url: "https://ota.mock-server.com/v1"
+    hash_algorithm: "sha256"
+    signature_algorithm: "RSA-2048"
+    resume_support: true
+    download_retries: 3
+    min_battery_percent: 30
+    min_storage_mb: 4096
+    allowed_network_types: ["wifi", "4g", "5g"]
+
+  # 远程控制
+  remote_control:
+    cloud_api_base: "https://api.mock-cloud.com/v1/vehicle"
+    cloud_mqtt_broker: "mqtt://mqtt.mock-cloud.com:1883"
+    ac_cmd_can_id: 0x400
+    ac_status_can_id: 0x401
+    e2e_response_max_ms: 5000
+    cloud_to_vehicle_max_ms: 3000
+    ac_temp_range: [16, 32]
+    ac_fan_levels: [1, 2, 3, 4, 5, 6, 7]
+    ac_modes: ["cooling", "heating", "auto", "ventilation"]
+    command_retries: 3
+    auth_token: "mock-token-abc123"
+    test_rounds: 20
+
+# ADAS 测试配置
+adas:
+  response_time_max_ms: 100       # 系统响应时间上限
+  perception:
+    detection_accuracy_min: 0.95  # 最低检测准确率
+    detection_latency_max_ms: 50  # 检测延迟上限 (ms)
+    detection_range_m: 200        # 最大检测距离 (m)
+    target_types:                 # 支持的目标类型
+      - vehicle
+      - pedestrian
+      - cyclist
+      - truck
+      - traffic_sign
+      - traffic_light
+    test_rounds: 50               # 每组测试帧数
+    camera_resolution: "1920x1080"
+    camera_fps: 30
+    camera_target_list_id: 0x500  # 目标列表 CAN ID
+    camera_status_id: 0x501       # 感知状态 CAN ID
+    test_distances_m: [10, 30, 50, 80, 120, 200]
+    iou_threshold: 0.5            # 目标框重叠度阈值
+  aeb:
+    max_ttc_s: 3.0                # 最大碰撞时间
+  acc:
+    following_distance_tolerance: 0.1  # 跟车距离容差
+
+# VCU 测试配置
+vcu:
+  torque_control:
+    accuracy_percent: 2.0         # 扭矩控制精度 ±2%
+  soc_estimation:
+    accuracy_percent: 3.0         # SOC 估算精度 ±3%
+  temperature_control:
+    accuracy_celsius: 0.5         # 温度控制精度 ±0.5°C
+  body_control:
+    door:
+      central_lock_cmd_id: 0x310        # 中控锁指令 CAN ID
+      central_lock_status_id: 0x311     # 中控锁状态反馈 CAN ID
+      door_status_id: 0x312             # 四门状态 CAN ID
+      lock_response_timeout_ms: 500     # 上锁超时 (ms)
+      unlock_response_timeout_ms: 500   # 解锁超时 (ms)
+      max_response_time_ms: 300         # 响应时间达标阈值 (ms)
+      test_cycles: 50                   # 循环测试次数
+      auto_lock_speed_kmh: 20           # 行驶自动落锁速度阈值 (km/h)
+      doors:                            # 车门列表
+        - front_left
+        - front_right
+        - rear_left
+        - rear_right
+
+# 跨域集成测试配置
+integration:
+  cockpit_vcu:
+    drive_mode_can_id: 0x200            # 驾驶模式指令 CAN ID
+    drive_mode_status_can_id: 0x201     # 驾驶模式状态反馈 CAN ID
+    display_sync_max_ms: 200            # 座舱显示同步延迟上限 (ms)
+    supported_drive_modes:              # 支持的驾驶模式
+      - eco
+      - comfort
+      - sport
+      - sport_plus
+      - snow
+    switch_test_cycles: 10              # 模式切换测试循环数
+    ui_drive_mode_query: "dumpsys activity top | grep -i drivemode"

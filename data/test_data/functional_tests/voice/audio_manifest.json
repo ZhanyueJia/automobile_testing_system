@@ -1,0 +1,29 @@
+{
+  "test_suite": "voice_wakeup",
+  "description": "语音唤醒率测试音频文件目录",
+  "audio_format": "WAV",
+  "sample_rate_hz": 16000,
+  "channels": 1,
+  "bit_depth": 16,
+  "files": {
+    "wakeup_audio": {
+      "description": "唤醒词音频文件 (真实测试时需替换为实际录制的音频)",
+      "naming_convention": "{唤醒词}_{环境条件}.wav",
+      "examples": [
+        "你好小车_quiet.wav",
+        "小爱同学_quiet.wav",
+        "NOMI_quiet.wav"
+      ]
+    },
+    "false_trigger": {
+      "description": "误唤醒测试音频 (日常对话、音乐、噪声等)",
+      "files": [
+        "daily_conversation.wav",
+        "music_playing.wav",
+        "road_noise.wav",
+        "similar_word.wav"
+      ]
+    }
+  },
+  "note": "此为占位文件，实际测试时需要准备对应的真实音频文件"
+}

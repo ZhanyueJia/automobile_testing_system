@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "automotive-test-framework"
+version = "1.0.0"
+description = "汽车智能化自动测试平台 - 覆盖智能座舱/智能驾驶/整车控制"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [
+    {name = "Automotive Test Team"}
+]
+
+[tool.pytest.ini_options]
+testpaths = ["test_cases"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+markers = [
+    "cockpit: 智能座舱测试",
+    "adas: 智能驾驶测试",
+    "vcu: 整车控制测试",
+    "integration: 跨域集成测试",
+    "smoke: 冒烟测试",
+    "regression: 回归测试",
+    "performance: 性能测试",
+    "safety: 安全测试",
+    "p0: 最高优先级",
+    "p1: 高优先级",
+    "p2: 中优先级",
+    "p3: 低优先级",
+    "hil: 需要HIL硬件环境",
+    "simulation: 仿真环境测试",
+    "real_vehicle: 实车测试",
+]
+addopts = [
+    "-v",
+    "--strict-markers",
+    "--tb=short",
+    "-ra",
+]
+log_cli = true
+log_cli_level = "INFO"
+log_cli_format = "%(asctime)s [%(levelname)s] %(name)s: %(message)s"
+log_cli_date_format = "%Y-%m-%d %H:%M:%S"
+
+[tool.setuptools.packages.find]
+include = ["common*", "drivers*", "tools*", "test_cases*"]

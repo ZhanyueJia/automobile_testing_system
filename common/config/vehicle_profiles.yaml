@@ -1,0 +1,92 @@
+# ============================================================
+# 车型配置文件 - Vehicle Profiles
+# 支持多车型参数管理，测试运行时按车型加载对应配置
+# ============================================================
+
+vehicle_profiles:
+  # ----- 小米 SU7 -----
+  xiaomi_su7:
+    brand: "小米"
+    model: "SU7"
+    platform: "Xiaomi HyperOS Car"
+    year: 2024
+    cockpit:
+      os: "Xiaomi HyperOS"
+      soc: "Qualcomm 8295"
+      voice_assistant: "小爱同学"
+      wakeup_word: "小爱同学"
+      screens: 3
+      voice:
+        wakeup_threshold: 0.95
+        supported_zones: ["driver", "passenger", "rear"]
+        noise_robustness_db: 70
+    adas:
+      platform: "Xiaomi Pilot"
+      level: "L2+"
+      sensors:
+        camera_count: 11
+        radar_count: 3
+        lidar_count: 1
+        ultrasonic_count: 12
+    vcu:
+      battery_voltage: 800
+      motor_type: "dual"
+      max_power_kw: 495
+
+  # ----- 蔚来 ET7 -----
+  nio_et7:
+    brand: "蔚来"
+    model: "ET7"
+    platform: "NIO NT2.0"
+    year: 2024
+    cockpit:
+      os: "Alder"
+      soc: "Qualcomm 8155"
+      voice_assistant: "NOMI"
+      wakeup_word: "NOMI"
+      screens: 2
+      voice:
+        wakeup_threshold: 0.95
+        supported_zones: ["driver", "passenger", "rear"]
+        noise_robustness_db: 65
+    adas:
+      platform: "NIO Aquila"
+      level: "L2+"
+      sensors:
+        camera_count: 11
+        radar_count: 5
+        lidar_count: 1
+        ultrasonic_count: 12
+    vcu:
+      battery_voltage: 400
+      motor_type: "dual"
+      max_power_kw: 480
+
+  # ----- 通用/默认配置 -----
+  default:
+    brand: "Generic"
+    model: "Default"
+    platform: "Generic Platform"
+    year: 2024
+    cockpit:
+      os: "Android Automotive"
+      soc: "Qualcomm 8155"
+      voice_assistant: "Generic VA"
+      wakeup_word: "你好小车"
+      screens: 1
+      voice:
+        wakeup_threshold: 0.95
+        supported_zones: ["driver"]
+        noise_robustness_db: 60
+    adas:
+      platform: "Generic ADAS"
+      level: "L2"
+      sensors:
+        camera_count: 6
+        radar_count: 1
+        lidar_count: 0
+        ultrasonic_count: 8
+    vcu:
+      battery_voltage: 400
+      motor_type: "single"
+      max_power_kw: 150

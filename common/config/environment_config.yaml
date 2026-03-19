@@ -1,0 +1,40 @@
+# ============================================================
+# 环境配置 - Environment Configuration
+# ============================================================
+
+environment:
+  # 默认运行环境
+  default: "simulation"
+
+  # 仿真环境
+  simulation:
+    type: "simulation"
+    description: "仿真测试环境 - 不需要实际硬件"
+    adb_mock: true
+    can_mock: true
+    hil_mock: true
+
+  # HIL 环境
+  hil:
+    type: "hil"
+    description: "硬件在环测试环境"
+    adb_mock: false
+    can_mock: false
+    hil_mock: false
+    hil_platform: "dspace"
+
+  # 实车环境
+  real_vehicle:
+    type: "real_vehicle"
+    description: "实车测试环境"
+    adb_mock: false
+    can_mock: false
+    hil_mock: true
+
+  # CI 环境
+  ci:
+    type: "ci"
+    description: "CI/CD 流水线环境"
+    adb_mock: true
+    can_mock: true
+    hil_mock: true

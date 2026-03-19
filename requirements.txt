@@ -1,0 +1,86 @@
+# ===============================================
+# 🚗 Automotive Test Framework Requirements
+# ===============================================
+
+# ===== Core Test Framework =====
+# 测试框架核心组件
+pytest>=7.4.0
+pytest-html>=4.1.0              # HTML测试报告
+pytest-xdist>=3.5.0             # 并行测试执行
+pytest-timeout>=2.2.0           # 测试超时控制
+pytest-rerunfailures>=13.0      # 失败重试机制
+pytest-ordering>=0.6            # 测试执行顺序控制
+pytest-metadata>=3.0.0          # 测试元数据收集
+allure-pytest>=2.13.0           # Allure测试报告
+pytest-asyncio>=0.21.0          # 异步测试支持（建议添加）
+
+# ===== Configuration & Data =====
+# 配置管理和数据验证
+PyYAML>=6.0.1                   # YAML配置文件解析
+pydantic>=2.5.0                 # 数据验证和设置管理
+pydantic-settings>=2.1.0        # 配置管理
+python-dotenv>=1.0.0            # 环境变量管理
+
+# ===== Vehicle Communication =====
+# 车辆通信协议栈
+python-can>=4.3.0               # CAN总线通信
+cantools>=39.4.0                # DBC文件解析和编码
+udsoncan>=1.21.0                # UDS诊断协议
+python-uds>=1.0.0               # UDS协议实现
+doipclient>=1.1.8               # DoIP诊断（建议添加）
+someip>=0.3.0                   # SOME/IP协议（建议添加）
+
+# ===== Network & Protocols =====
+# 网络通信和协议
+scapy>=2.5.0                    # 网络包构造和分析
+paho-mqtt>=1.6.1                # MQTT客户端
+requests>=2.31.0                # HTTP客户端
+aiohttp>=3.9.0                  # 异步HTTP客户端
+websockets>=12.0                # WebSocket支持（建议添加）
+
+# ===== ADB & Android =====
+# Android座舱系统控制
+pure-python-adb>=0.3.0.dev0     # ADB协议实现
+adbutils>=1.2.9                 # ADB工具封装
+uiautomator2>=2.16.30           # Android UI自动化（建议添加）
+appium-python-client>=2.11.1    # Appium客户端（建议添加）
+
+# ===== Data Processing =====
+# 数据处理和分析
+numpy>=1.26.0                   # 数值计算
+pandas>=2.1.0                   # 数据分析
+scipy>=1.11.0                   # 科学计算
+matplotlib>=3.8.0               # 数据可视化（建议添加）
+seaborn>=0.12.2                 # 统计图表（建议添加）
+
+# ===== Logging & Reporting =====
+# 日志和报告系统
+loguru>=0.7.2                   # 结构化日志
+rich>=13.7.0                    # 终端美化输出
+jinja2>=3.1.2                   # 报告模板引擎
+json5>=0.9.14                   # JSON5支持（建议添加）
+
+# ===== Async & Concurrency =====
+# 异步和并发处理
+asyncio-mqtt>=0.16.1            # 异步MQTT客户端
+aiofiles>=23.2.0                # 异步文件操作（建议添加）
+concurrent-log-handler>=0.9.24  # 并发日志处理（建议添加）
+
+# ===== Utilities & CLI =====
+# 工具类和命令行
+click>=8.1.7                    # 命令行界面
+tenacity>=8.2.3                 # 重试机制
+wrapt>=1.16.0                   # 装饰器和AOP
+colorama>=0.4.6                 # 跨平台彩色输出（建议添加）
+progressbar2>=4.2.0             # 进度条显示（建议添加）
+
+# ===== Security =====
+# 安全相关
+cryptography>=41.0.0            # 加密解密（建议添加）
+pyjwt>=2.8.0                    # JWT令牌（建议添加）
+
+# ===== Simulation & HIL =====
+# 仿真和硬件在环
+pyserial>=3.5                   # 串口通信（HIL设备）
+opencv-python>=4.8.0            # 计算机视觉（摄像头仿真）
+pyaudio>=0.2.13                 # 音频处理（语音测试）
