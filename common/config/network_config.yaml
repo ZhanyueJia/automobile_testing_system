@@ -1,0 +1,31 @@
+# ============================================================
+# 网络 / 通信参数配置 - Network Configuration
+# ============================================================
+
+can:
+  default_interface: "socketcan"
+  default_channel: "can0"
+  default_bitrate: 500000
+  can_fd:
+    enabled: true
+    data_bitrate: 2000000
+  timeout: 1.0
+
+ethernet:
+  someip:
+    service_discovery_port: 30490
+    default_timeout: 2.0
+  doip:
+    port: 13400
+    activation_type: 0
+
+adb:
+  default_host: "127.0.0.1"
+  default_port: 5037
+  connect_timeout: 10
+  command_timeout: 30
+
+mqtt:
+  broker_host: "localhost"
+  broker_port: 1883
+  keepalive: 60

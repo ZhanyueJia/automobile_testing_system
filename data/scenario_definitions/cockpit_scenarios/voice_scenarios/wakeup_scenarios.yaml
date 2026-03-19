@@ -1,0 +1,90 @@
+# ============================================================
+# 语音唤醒测试场景定义
+# ============================================================
+
+scenarios:
+  # 场景1: 基础唤醒 - 安静环境
+  basic_quiet_wakeup:
+    name: "安静环境基础唤醒"
+    category: "基础功能"
+    priority: P0
+    preconditions:
+      - "车辆上电, 座舱系统启动完成"
+      - "语音助手进程已启动并处于空闲状态"
+      - "环境噪声 ≤ 40dB"
+    parameters:
+      noise_level_db: 40
+      distance_m: 1.0
+      zone: "driver"
+      test_rounds: 100
+    pass_criteria:
+      wakeup_rate_min: 0.95
+      avg_response_time_max_ms: 1500
+      max_response_time_ms: 3000
+
+  # 场景2: 高速公路场景
+  highway_wakeup:
+    name: "高速公路场景唤醒"
+    category: "噪声鲁棒性"
+    priority: P1
+    preconditions:
+      - "车辆行驶中 (高速公路 100-120km/h)"
+      - "窗户关闭, 空调开启"
+      - "环境噪声 65-75dB"
+    parameters:
+      noise_level_db: 70
+      distance_m: 1.0
+      zone: "driver"
+      test_rounds: 50
+    pass_criteria:
+      wakeup_rate_min: 0.90
+      avg_response_time_max_ms: 2000
+
+  # 场景3: 后排乘客唤醒
+  rear_passenger_wakeup:
+    name: "后排乘客唤醒"
+    category: "多音区"
+    priority: P1
+    preconditions:
+      - "车辆上电, 座舱系统启动完成"
+      - "支持多音区语音识别"
+    parameters:
+      noise_level_db: 50
+      distance_m: 1.5
+      zone: "rear_left"
+      test_rounds: 50
+    pass_criteria:
+      wakeup_rate_min: 0.93
+
+  # 场景4: 音乐播放中唤醒
+  music_playing_wakeup:
+    name: "音乐播放中唤醒"
+    category: "干扰抑制"
+    priority: P1
+    preconditions:
+      - "座舱正在播放音乐 (中等音量)"
+      - "音乐类型: 流行/摇滚"
+    parameters:
+      noise_level_db: 65
+      distance_m: 1.0
+      zone: "driver"
+      test_rounds: 50
+      background_audio: "music_playing"
+    pass_criteria:
+      wakeup_rate_min: 0.92
+
+  # 场景5: 多人交谈场景
+  multi_person_talking:
+    name: "多人交谈场景唤醒"
+    category: "干扰抑制"
+    priority: P2
+    preconditions:
+      - "车内有 2-3 人同时交谈"
+    parameters:
+      noise_level_db: 60
+      distance_m: 1.0
+      zone: "driver"
+      test_rounds: 50
+      background_audio: "conversation"
+    pass_criteria:
+      wakeup_rate_min: 0.90
