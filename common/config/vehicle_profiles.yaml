@@ -32,6 +32,9 @@ vehicle_profiles:
       battery_voltage: 800
       motor_type: "dual"
       max_power_kw: 495
+      voltage_12v_range: [11.5, 14.5]
+      voltage_hv_range: [550, 850]
+      temperature_cabin_range: [18.0, 28.0]
 
   # ----- 蔚来 ET7 -----
   nio_et7:
@@ -61,6 +64,9 @@ vehicle_profiles:
       battery_voltage: 400
       motor_type: "dual"
       max_power_kw: 480
+      voltage_12v_range: [11.5, 14.5]
+      voltage_hv_range: [300, 450]
+      temperature_cabin_range: [18.0, 28.0]
 
   # ----- 通用/默认配置 -----
   default:
@@ -90,3 +96,6 @@ vehicle_profiles:
       battery_voltage: 400
       motor_type: "single"
       max_power_kw: 150
+      voltage_12v_range: [11.5, 14.5]
+      voltage_hv_range: [300, 450]
+      temperature_cabin_range: [18.0, 28.0]
