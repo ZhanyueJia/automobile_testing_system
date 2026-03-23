@@ -42,6 +42,8 @@ class ChargingState(str, Enum):
 
 
 # 通用阈值
+# 注意: 这些阈值已移至 vehicle_profiles.yaml 的 vcu 部分管理
+# 此处保留作为向后兼容的默认值
 VOLTAGE_12V_NORMAL_RANGE = (11.5, 14.5)    # 12V 电池正常电压范围
 VOLTAGE_HV_NORMAL_RANGE = (300, 450)        # 高压电池正常电压范围 (400V平台)
 VOLTAGE_HV_800_RANGE = (550, 850)           # 800V 平台电压范围
