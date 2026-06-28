@@ -12,6 +12,93 @@ license = {text = "MIT"}
 authors = [
     {name = "Automotive Test Team"}
 ]
+dependencies = [
+    # Core Test Framework
+    "pytest>=7.4.0",
+    "pytest-html>=4.1.0",
+    "pytest-xdist>=3.5.0",
+    "pytest-timeout>=2.2.0",
+    "pytest-rerunfailures>=13.0",
+    "pytest-ordering>=0.6",
+    "pytest-metadata>=3.0.0",
+    "allure-pytest>=2.13.0",
+    "pytest-asyncio>=0.21.0",
+    # Configuration & Data
+    "PyYAML>=6.0.1",
+    "pydantic>=2.5.0",
+    "pydantic-settings>=2.1.0",
+    "python-dotenv>=1.0.0",
+    # Logging & Reporting
+    "loguru>=0.7.2",
+    "rich>=13.7.0",
+    "jinja2>=3.1.2",
+    # Utilities & CLI
+    "click>=8.1.7",
+    "tenacity>=8.2.3",
+    "wrapt>=1.16.0",
+    # Async & Concurrency
+    "asyncio-mqtt>=0.16.1",
+    # Vehicle Communication (optional - may require platform-specific installation)
+    "python-can>=4.3.0",
+    "cantools>=39.4.0",
+    "udsoncan>=1.21.0",
+    "python-uds>=1.0.0",
+    # Network & Protocols
+    "scapy>=2.5.0",
+    "paho-mqtt>=1.6.1",
+    "requests>=2.31.0",
+    "aiohttp>=3.9.0",
+    # ADB & Android
+    "pure-python-adb>=0.3.0.dev0",
+    "adbutils>=1.2.9",
+    # Data Processing
+    "numpy>=1.26.0",
+    "pandas>=2.1.0",
+    # Simulation & HIL
+    "pyserial>=3.5",
+]
+
+[project.optional-dependencies]
+# Optional dependencies for specific use cases
+dev = [
+    "ruff>=0.1.0",
+    "mypy>=1.7.0",
+    "pre-commit>=3.5.0",
+]
+simulation = [
+    "opencv-python>=4.8.0",
+    "pyaudio>=0.2.13",
+]
+android = [
+    "uiautomator2>=2.16.30",
+    "appium-python-client>=2.11.1",
+]
+can = [
+    "doipclient>=1.1.8",
+    "someip>=0.3.0",
+]
+visualization = [
+    "matplotlib>=3.8.0",
+    "seaborn>=0.12.2",
+]
+security = [
+    "cryptography>=41.0.0",
+    "pyjwt>=2.8.0",
+]
+all = [
+    "opencv-python>=4.8.0",
+    "pyaudio>=0.2.13",
+    "uiautomator2>=2.16.30",
+    "appium-python-client>=2.11.1",
+    "doipclient>=1.1.8",
+    "someip>=0.3.0",
+    "matplotlib>=3.8.0",
+    "seaborn>=0.12.2",
+    "cryptography>=41.0.0",
+    "pyjwt>=2.8.0",
+    "ruff>=0.1.0",
+    "mypy>=1.7.0",
+]
 
 [project.scripts]
 atf = "tools.cli:main"
@@ -52,3 +139,16 @@ log_cli_date_format = "%Y-%m-%d %H:%M:%S"
 [tool.setuptools.packages.find]
 include = ["common*", "drivers*", "tools*", "test_cases*"]
 
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "C4"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
