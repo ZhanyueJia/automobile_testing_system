@@ -13,6 +13,9 @@ authors = [
     {name = "Automotive Test Team"}
 ]
 
+[project.scripts]
+atf = "tools.cli:main"
+
 [tool.pytest.ini_options]
 testpaths = ["test_cases"]
 python_files = ["test_*.py"]
@@ -48,3 +51,4 @@ log_cli_date_format = "%Y-%m-%d %H:%M:%S"
 
 [tool.setuptools.packages.find]
 include = ["common*", "drivers*", "tools*", "test_cases*"]
+
