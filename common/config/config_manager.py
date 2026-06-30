@@ -125,7 +125,7 @@ class ConfigManager:
     def _read_yaml(path: Path) -> dict[str, Any]:
         if not path.exists():
             return {}
-        with open(path, "r", encoding="utf-8") as f:
+        with open(path, encoding="utf-8") as f:
             return yaml.safe_load(f) or {}
 
     def _merge(self, new: dict[str, Any]) -> None:

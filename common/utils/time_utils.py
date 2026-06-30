@@ -5,9 +5,9 @@ TimeUtils - 时间处理工具
 from __future__ import annotations
 
 import time
+from collections.abc import Generator
 from contextlib import contextmanager
-from dataclasses import dataclass, field
-from typing import Generator
+from dataclasses import dataclass
 
 
 @dataclass

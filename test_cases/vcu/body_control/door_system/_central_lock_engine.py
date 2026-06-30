@@ -7,7 +7,6 @@ from __future__ import annotations
 
 import time
 from dataclasses import dataclass, field
-from typing import Optional
 
 from common.utils.logger import get_logger
 from common.utils.time_utils import TimeUtils
@@ -172,7 +171,7 @@ class CentralLockEngine:
 
     # ---- 读取状态 ----
 
-    def read_lock_status(self, timeout_s: float = 0.5) -> Optional[int]:
+    def read_lock_status(self, timeout_s: float = 0.5) -> int | None:
         """
         读取中控锁状态反馈
 
@@ -246,7 +245,7 @@ class CentralLockEngine:
     def _mock_reset(self) -> None:
         """重置 Mock 状态为默认 (全车解锁, 门全关好)"""
         self._mock_state = LockStatus.UNLOCKED
-        self._mock_doors = {d: False for d in DoorPosition.ALL}
+        self._mock_doors = dict.fromkeys(DoorPosition.ALL, False)
         self._mock_door_ajar.clear()
 
     # ---- 高阶测试逻辑 ----

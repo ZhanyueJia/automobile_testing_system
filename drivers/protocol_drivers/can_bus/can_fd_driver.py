@@ -5,11 +5,10 @@ CAN-FD Driver - CAN / CAN-FD 总线通信驱动
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
-from drivers.base_driver import BaseDriver
 from common.utils.logger import get_logger
-from common.decorators import retry, log_call
+from drivers.base_driver import BaseDriver
 
 logger = get_logger("driver.can_fd")
 
@@ -128,7 +127,7 @@ class CANFDDriver(BaseDriver):
         )
         self._bus.send(can_msg)
 
-    def receive(self, timeout: float = 1.0) -> Optional[CANMessage]:
+    def receive(self, timeout: float = 1.0) -> CANMessage | None:
         """接收 CAN 报文"""
         if self._mock:
             return None

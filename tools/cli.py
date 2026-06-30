@@ -3,13 +3,12 @@ Command line interface for the Automotive Test Framework.
 """
 from __future__ import annotations
 
-import tomllib
 from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 
 import click
 import pytest
-
+import tomllib
 
 FRAMEWORK_ROOT = Path(__file__).resolve().parent.parent
 

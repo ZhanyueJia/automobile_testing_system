@@ -18,7 +18,6 @@ from drivers.protocol_drivers.can_bus.can_fd_driver import CANFDDriver
 from test_cases.vcu.body_control.door_system._central_lock_engine import (
     CentralLockEngine,
     LockCommand,
-    LockStatus,
     LockTestResult,
 )
 

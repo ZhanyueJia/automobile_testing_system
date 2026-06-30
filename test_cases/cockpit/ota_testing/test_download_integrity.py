@@ -31,19 +31,15 @@ from __future__ import annotations
 
 import hashlib
 import json
-import os
 import random
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum
-from typing import Optional
 
 import allure
 import pytest
 
 from common.utils.logger import get_logger
-from common.utils.time_utils import TimeUtils
-from common.decorators import retry, measure_performance
 from drivers.protocol_drivers.adb_driver import ADBDriver
 
 logger = get_logger("test.ota_download")
@@ -102,7 +98,7 @@ class OTAPackage:
 @dataclass
 class DownloadResult:
     """单次下载测试结果"""
-    package: Optional[OTAPackage] = None
+    package: OTAPackage | None = None
     state: DownloadState = DownloadState.IDLE
     progress_percent: float = 0.0
     download_time_s: float = 0.0
