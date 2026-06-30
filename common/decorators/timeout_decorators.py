@@ -10,7 +10,8 @@ from __future__ import annotations
 
 import functools
 import threading
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 from common.utils.logger import get_logger
 

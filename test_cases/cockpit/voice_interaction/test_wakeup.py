@@ -26,7 +26,6 @@ import json
 import time
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Optional
 
 import allure
 import pytest
@@ -254,7 +253,7 @@ class TestWakeup:
 
         false_wakeup_count = 0
 
-        for phrase in test_phrases:
+        for _phrase in test_phrases:
             # Mock: 无唤醒词不应触发唤醒
             false_wakeup = False  # 实际应调用语音引擎
             if false_wakeup:

@@ -391,6 +391,6 @@ class MyDriver(BaseDriver):
 
 ## CI 与质量门禁
 
-GitHub Actions 默认执行最小质量门禁，覆盖 Python 编译检查、关键 Ruff 检查和 CI 冒烟测试。HIL 与实车测试不会在默认 CI 中运行，需要在对应环境里显式传入 `--env hil` 或 `--env real_vehicle`。
+GitHub Actions 默认执行最小质量门禁，覆盖 Python 编译检查、全量 Ruff 检查和 CI 冒烟测试。HIL 与实车测试不会在默认 CI 中运行，需要在对应环境里显式传入 `--env hil` 或 `--env real_vehicle`。
 
 详细使用步骤、触发条件、本地复现命令和常见失败处理方式见 [CI 与质量门禁使用指南](docs/ci_quality_gates.md)。

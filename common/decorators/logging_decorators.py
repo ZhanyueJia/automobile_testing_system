@@ -5,7 +5,8 @@ log_call - 自动日志记录装饰器
 from __future__ import annotations
 
 import functools
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 from common.utils.logger import get_logger
 

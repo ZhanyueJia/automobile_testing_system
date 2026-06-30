@@ -28,19 +28,16 @@ test_camera_detection.py - 摄像头目标检测测试
 """
 from __future__ import annotations
 
-import time
 import json
 import random
+import time
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Optional
 
 import allure
 import pytest
 
 from common.utils.logger import get_logger
-from common.utils.time_utils import TimeUtils
-from common.decorators import retry, measure_performance
 from drivers.protocol_drivers.can_bus.can_fd_driver import CANFDDriver, CANMessage
 
 logger = get_logger("test.camera_detection")
@@ -382,7 +379,7 @@ class CameraDetectionEngine:
         result = DetectionTestResult(condition="false positive - empty scene")
         logger.info(f"Start false positive test ({rounds} frames)")
 
-        for i in range(1, rounds + 1):
+        for _i in range(1, rounds + 1):
             if self._can._mock:
                 det = self._mock_false_positive_check()
             else:

@@ -6,7 +6,8 @@ from __future__ import annotations
 
 import functools
 import time
-from typing import Any, Callable, Sequence, Type
+from collections.abc import Callable, Sequence
+from typing import Any
 
 from common.utils.logger import get_logger
 
@@ -17,7 +18,7 @@ def retry(
     max_attempts: int = 3,
     delay: float = 1.0,
     backoff: float = 2.0,
-    exceptions: Sequence[Type[Exception]] = (Exception,),
+    exceptions: Sequence[type[Exception]] = (Exception,),
     on_retry: Callable | None = None,
 ):
     """

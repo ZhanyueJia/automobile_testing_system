@@ -7,7 +7,7 @@
 默认 CI 面向日常开发和 PR 校验，目标是尽早发现会阻塞项目运行的基础问题，包括：
 
 - Python 语法或导入级编译错误
-- 高风险 Ruff 错误
+- Ruff 代码质量问题
 - CI 环境下的冒烟测试失败
 
 默认 CI 不连接 HIL、实车、真实 ADB 设备或真实 CAN 设备。涉及硬件的测试需要在专用环境里手动运行。
@@ -36,14 +36,14 @@ Workflow 文件位于：
 2. 安装 `requirements.txt` 中的项目依赖。
 3. 安装 `ruff`。
 4. 编译核心 Python 源码。
-5. 运行关键 Ruff 检查。
+5. 运行 Ruff 检查。
 6. 运行 CI 冒烟测试。
 
 等价命令如下：
 
 ```bash
 python -m compileall -q common drivers tools test_cases conftest.py
-python -m ruff check . --select E9,F63,F7,F82
+python -m ruff check .
 pytest -m smoke --env ci --test-rounds 3 -q
 ```
 
@@ -55,7 +55,7 @@ pytest -m smoke --env ci --test-rounds 3 -q
 python -m pip install -r requirements.txt
 python -m pip install ruff
 python -m compileall -q common drivers tools test_cases conftest.py
-python -m ruff check . --select E9,F63,F7,F82
+python -m ruff check .
 pytest -m smoke --env ci --test-rounds 3 -q
 ```
 
@@ -63,20 +63,18 @@ Windows PowerShell、Linux shell 和 GitHub Actions runner 中的命令保持一
 
 ## Ruff 门禁范围
 
-当前 Ruff 门禁只启用关键错误类别：
+当前 Ruff 门禁执行全量检查：
 
 ```bash
-python -m ruff check . --select E9,F63,F7,F82
+python -m ruff check .
 ```
 
-这些规则主要覆盖：
+Ruff 规则由 `pyproject.toml` 中的 `[tool.ruff]` 和 `[tool.ruff.lint]` 配置控制。当前启用 `E`、`F`、`W`、`I`、`N`、`UP`、`B`、`C4` 等规则族。
 
-- `E9`：语法错误、缩进错误等解析级问题
-- `F63`：无效比较或异常的 Pyflakes 检查
-- `F7`：控制流、占位符、无效语句等高风险问题
-- `F82`：未定义变量、作用域错误等运行前可发现的问题
+项目暂时忽略以下规则：
 
-暂时没有启用完整的 `ruff check .`，因为仓库中仍有历史风格问题和可自动修复项。完整 lint 建议在单独分支中逐步清理，避免让 CI 从一开始就因历史问题常红。
+- `E501`：长行限制。项目中有中文说明、日志和测试数据，短期先不强制统一折行。
+- `N818`：异常类名必须以 `Error` 结尾。现有 `VehicleException`、`NetworkException` 等是公开异常基类，直接改名会影响兼容性。
 
 ## 冒烟测试范围
 
@@ -127,16 +125,17 @@ python -m compileall -q common drivers tools test_cases conftest.py
 命令：
 
 ```bash
-python -m ruff check . --select E9,F63,F7,F82
+python -m ruff check .
 ```
 
 常见原因：
 
-- 未定义变量
-- 删除/重命名函数后调用点未更新
-- 语法级错误
+- 未使用导入或变量
+- import 顺序不符合规则
+- 未定义变量或作用域错误
+- 异常链、循环变量、现代类型写法等代码质量问题
 
-处理方式：优先修复 Ruff 输出中的文件和行号。当前门禁只覆盖高风险问题，通常不应通过忽略规则绕过。
+处理方式：优先修复 Ruff 输出中的文件和行号。只有涉及公共 API 兼容性或项目级风格策略的问题，才应通过 `pyproject.toml` 明确配置忽略。
 
 ### 冒烟测试失败
 
@@ -161,10 +160,9 @@ pytest test_cases/path/to/test_file.py::TestClass::test_case --env ci --test-rou
 
 ## 后续收紧建议
 
-当前 CI 是最小可用版本。后续可以逐步增加：
+当前 CI 已启用全量 Ruff 检查。后续可以逐步增加：
 
 - `pytest tests/unit -q`，在单元测试分支合入后启用。
-- 全量 `ruff check .`，在历史 lint 基线清理后启用。
 - `ruff format --check .`，在统一格式化策略后启用。
 - Python 3.10 / 3.11 / 3.12 矩阵，验证最低版本兼容性。
 - HTML 或 JSON 测试报告归档，便于追踪失败细节。

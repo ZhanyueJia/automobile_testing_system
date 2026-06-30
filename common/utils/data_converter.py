@@ -5,7 +5,6 @@ DataConverter - 数据格式转换工具
 from __future__ import annotations
 
 import json
-import struct
 from pathlib import Path
 from typing import Any
 
@@ -45,7 +44,7 @@ class DataConverter:
     @staticmethod
     def load_json(path: str | Path) -> Any:
         """加载 JSON 文件"""
-        with open(path, "r", encoding="utf-8") as f:
+        with open(path, encoding="utf-8") as f:
             return json.load(f)
 
     @staticmethod

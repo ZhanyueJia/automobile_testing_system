@@ -14,14 +14,11 @@ ADB Driver - Android Debug Bridge 驱动
 from __future__ import annotations
 
 import subprocess
-import time
-from pathlib import Path
-from typing import Optional, Sequence
+from collections.abc import Sequence
 
-from drivers.base_driver import BaseDriver
-from common.utils.logger import get_logger
-from common.decorators import retry, log_call
 from common.exceptions import ADBConnectionError
+from common.utils.logger import get_logger
+from drivers.base_driver import BaseDriver
 
 logger = get_logger("driver.adb")
 
@@ -79,11 +76,11 @@ class ADBDriver(BaseDriver):
                     self._connected = True
                     logger.info(f"[{self._name}] 命令行模式连接成功")
                 else:
-                    raise ADBConnectionError("ADB 命令行无可用设备")
+                    raise ADBConnectionError("ADB 命令行无可用设备") from None
         except ADBConnectionError:
             raise
         except Exception as e:
-            raise ADBConnectionError(f"ADB 连接失败: {e}")
+            raise ADBConnectionError(f"ADB 连接失败: {e}") from e
 
     def disconnect(self) -> None:
         """断开 ADB 连接"""

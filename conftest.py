@@ -10,7 +10,6 @@ conftest.py - pytest 全局配置与共享 fixture
 """
 from __future__ import annotations
 
-import time
 from pathlib import Path
 
 import pytest
@@ -82,11 +81,11 @@ def config(request) -> ConfigManager:
     if test_rounds > 0:
         cfg.set("cockpit.voice.wakeup.test_rounds", test_rounds)
 
-    logger.info(f"========================================")
-    logger.info(f"  Test Platform Started")
+    logger.info("========================================")
+    logger.info("  Test Platform Started")
     logger.info(f"  Vehicle: {vehicle_model}")
     logger.info(f"  Env: {env}")
-    logger.info(f"========================================")
+    logger.info("========================================")
 
     return cfg
 

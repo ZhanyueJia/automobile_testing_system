@@ -19,7 +19,6 @@ import allure
 import pytest
 
 from common.utils.logger import get_logger
-from common.utils.time_utils import TimeUtils
 from drivers.protocol_drivers.can_bus.can_fd_driver import CANFDDriver, CANMessage
 from test_cases.vcu.body_control.door_system._central_lock_engine import (
     CentralLockEngine,
