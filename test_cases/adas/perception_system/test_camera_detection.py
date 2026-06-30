@@ -133,7 +133,7 @@ class DetectionTestResult:
     condition: str = ""
     details: list[DetectionResult] = field(default_factory=list)
 
-    def add_result(self, result: DetectionResult) -> None:
+    def add_result(self, result: DetectionResult, expected_type: str | TargetType | None = None) -> None:
         self.details.append(result)
         self.total_frames += 1
 
@@ -149,7 +149,12 @@ class DetectionTestResult:
             self.missed_count += 1
 
         if result.detected and result.classified_type:
-            self.correct_classification_count += 1
+            if expected_type is None:
+                self.correct_classification_count += 1
+            else:
+                expected = expected_type.value if isinstance(expected_type, TargetType) else expected_type
+                if result.classified_type == expected:
+                    self.correct_classification_count += 1
 
         # 更新统计
         effective = self.detected_count + self.missed_count
@@ -354,7 +359,7 @@ class CameraDetectionEngine:
                 time.sleep(0.05)
                 det = self._read_detection_from_can(target)
 
-            result.add_result(det)
+            result.add_result(det, expected_type=target.target_type)
 
             if i % 20 == 0 or i == rounds:
                 logger.info(

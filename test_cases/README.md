@@ -101,10 +101,16 @@ pytest -m "p0 or p1"       # P0 + P1
 
 ### 3.4 按执行环境
 ```bash
-pytest -m hil              # 需要 HIL 硬件
 pytest -m simulation       # 仿真环境
-pytest -m real_vehicle      # 实车测试
+pytest -m ci               # CI 环境
+pytest -m mock             # 使用 Mock 驱动或仿真依赖
+pytest -m hil              # 需要 HIL 硬件
+pytest -m real_vehicle     # 实车测试
+pytest -m hardware         # 外部硬件或真实车辆连接
 ```
+
+`simulation` 和 `ci` 环境会自动给用例添加 `mock` 标记。带有 `hil`、`real_vehicle` 或 `hardware` 标记的用例只会在显式传入 `--env hil` 或 `--env real_vehicle` 时运行，避免在本地/CI 中误触发真实硬件连接。
+
 
 ### 3.5 组合筛选
 ```bash

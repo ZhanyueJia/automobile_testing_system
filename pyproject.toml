@@ -124,6 +124,9 @@ markers = [
     "hil: 需要HIL硬件环境",
     "simulation: 仿真环境测试",
     "real_vehicle: 实车测试",
+    "ci: CI环境测试",
+    "mock: 使用Mock驱动或仿真依赖的测试",
+    "hardware: 需要外部硬件或真实车辆连接的测试",
 ]
 addopts = [
     "-v",
