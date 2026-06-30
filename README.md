@@ -388,3 +388,17 @@ class MyDriver(BaseDriver):
 ## 许可证
 
 本项目仅供内部使用。
+
+## CI 与质量门禁
+
+GitHub Actions 默认执行最小质量门禁，覆盖 Python 编译检查、关键 Ruff 检查和 CI 冒烟测试。HIL 与实车测试不会在默认 CI 中运行，需要在对应环境里显式传入 `--env hil` 或 `--env real_vehicle`。
+
+本地等价命令：
+
+```bash
+python -m compileall -q common drivers tools test_cases conftest.py
+python -m ruff check . --select E9,F63,F7,F82
+pytest -m smoke --env ci --test-rounds 3 -q
+```
+
+当前 Ruff 门禁先限制在关键错误类别，避免历史风格问题阻塞 CI。后续清理现有 lint 基线后，可逐步扩展到 `ruff check .`。
