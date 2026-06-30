@@ -118,6 +118,16 @@ def pytest_collection_modifyitems(config, items):
         "integration": pytest.mark.integration,
     }
 
+    env = config.getoption("--env")
+    active_env_marker = getattr(pytest.mark, env)
+    mock_env = env in ("simulation", "ci")
+    skip_hardware = pytest.mark.skip(
+        reason="hardware-dependent test requires --env=hil or --env=real_vehicle"
+    )
+    skip_simulation = pytest.mark.skip(
+        reason="simulation/mock test requires --env=simulation or --env=ci"
+    )
+
     for item in items:
         # 根据文件路径自动添加域标记
         rel_path = str(Path(item.fspath).relative_to(FRAMEWORK_ROOT))
@@ -125,6 +135,20 @@ def pytest_collection_modifyitems(config, items):
             if f"test_cases/{domain}" in rel_path.replace("\\", "/"):
                 item.add_marker(marker)
                 break
+
+        # Environment markers make mock/simulation, HIL, and real-vehicle runs explicit.
+        item.add_marker(active_env_marker)
+        if mock_env:
+            item.add_marker(pytest.mark.mock)
+
+        marker_names = {marker.name for marker in item.iter_markers()}
+        hardware_marked = bool({"hil", "real_vehicle", "hardware"} & marker_names)
+        simulation_marked = "simulation" in marker_names or "mock" in marker_names
+
+        if hardware_marked and env not in ("hil", "real_vehicle"):
+            item.add_marker(skip_hardware)
+        if simulation_marked and not mock_env and not hardware_marked:
+            item.add_marker(skip_simulation)
 
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)

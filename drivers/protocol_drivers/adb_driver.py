@@ -16,7 +16,7 @@ from __future__ import annotations
 import subprocess
 import time
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Sequence
 
 from drivers.base_driver import BaseDriver
 from common.utils.logger import get_logger
@@ -74,7 +74,7 @@ class ADBDriver(BaseDriver):
                 logger.info(f"[{self._name}] 已连接设备: {self._device.serial}")
             except ImportError:
                 # 降级使用命令行
-                result = self._run_adb_cmd("devices")
+                result = self._run_adb_cmd(["devices"])
                 if "device" in result:
                     self._connected = True
                     logger.info(f"[{self._name}] 命令行模式连接成功")
@@ -110,7 +110,7 @@ class ADBDriver(BaseDriver):
             output = self._device.shell(command, timeout=self._command_timeout)
             return output if isinstance(output, str) else output.decode("utf-8", errors="replace")
         else:
-            return self._run_adb_cmd(f"shell {command}")
+            return self._run_adb_cmd(["shell", command])
 
     def shell_bool(self, command: str) -> bool:
         """执行 Shell 命令并返回布尔结果 (exit code == 0 为 True)"""
@@ -172,7 +172,7 @@ class ADBDriver(BaseDriver):
         if self._device:
             self._device.push(local_path, remote_path)
         else:
-            self._run_adb_cmd(f"push {local_path} {remote_path}")
+            self._run_adb_cmd(["push", local_path, remote_path])
         logger.debug(f"[{self._name}] 文件已推送: {remote_path}")
 
     def pull_file(self, remote_path: str, local_path: str) -> None:
@@ -184,7 +184,7 @@ class ADBDriver(BaseDriver):
         if self._device:
             self._device.pull(remote_path, local_path)
         else:
-            self._run_adb_cmd(f"pull {remote_path} {local_path}")
+            self._run_adb_cmd(["pull", remote_path, local_path])
 
     # ---------- 语音助手状态检测 ----------
 
@@ -237,12 +237,14 @@ class ADBDriver(BaseDriver):
 
     # ---------- 内部方法 ----------
 
-    def _run_adb_cmd(self, cmd: str) -> str:
+    def _run_adb_cmd(self, cmd: Sequence[str]) -> str:
         """通过命令行执行 adb 命令"""
-        full_cmd = f"adb {'-s ' + self._serial if self._serial else ''} {cmd}"
+        full_cmd = ["adb"]
+        if self._serial:
+            full_cmd.extend(["-s", self._serial])
+        full_cmd.extend(cmd)
         result = subprocess.run(
             full_cmd,
-            shell=True,
             capture_output=True,
             text=True,
             timeout=self._command_timeout,
@@ -250,6 +252,7 @@ class ADBDriver(BaseDriver):
         if result.returncode != 0 and result.stderr:
             logger.warning(f"ADB 命令输出 stderr: {result.stderr.strip()}")
         return result.stdout.strip()
+
 
     def _mock_shell(self, command: str) -> str:
         """Mock 模式下的 Shell 命令返回"""
