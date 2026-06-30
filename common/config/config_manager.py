@@ -5,34 +5,22 @@ ConfigManager - 统一配置管理器
 from __future__ import annotations
 
 import os
+from copy import deepcopy
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 import yaml
 
 
 class ConfigManager:
-    """统一配置管理，支持多车型切换和环境变量覆盖"""
-
-    _instance: Optional[ConfigManager] = None
+    """统一配置管理，支持多车型切换和环境变量覆盖。"""
 
     # 框架根目录
     FRAMEWORK_ROOT = Path(__file__).resolve().parent.parent.parent
 
-    def __new__(cls) -> ConfigManager:
-        if cls._instance is None:
-            cls._instance = super().__new__(cls)
-            cls._instance._config = {}  # 实例属性，避免类级共享
-            cls._instance._loaded = False
-        return cls._instance
-
     def __init__(self) -> None:
-        # 避免重复初始化: 单例模式下 __init__ 可能被多次调用
-        if hasattr(self, "_initialized"):
-            return
-        self._config: dict = {}
+        self._config: dict[str, Any] = {}
         self._loaded = False
-        self._initialized = True
 
     def load(
         self,
@@ -50,7 +38,7 @@ class ConfigManager:
         """
         config_dir = self.FRAMEWORK_ROOT / "common" / "config"
 
-        # 0. 清空旧配置，防止多次 load() 时数据残留
+        # 清空旧配置，防止多次 load() 时数据残留。
         self._config = {}
 
         # 1. 加载基础测试配置
@@ -65,10 +53,9 @@ class ConfigManager:
         # 4. 加载车型配置
         if vehicle_model:
             self._merge(self._read_yaml(config_dir / "vehicle_profiles.yaml"))
-            # 选择具体车型
             profiles = self._config.get("vehicle_profiles", {})
             if vehicle_model in profiles:
-                self._config["current_vehicle"] = profiles[vehicle_model]
+                self._config["current_vehicle"] = deepcopy(profiles[vehicle_model])
                 self._config["current_vehicle"]["model"] = vehicle_model
 
         # 5. 加载额外配置
@@ -92,23 +79,23 @@ class ConfigManager:
             default: 默认值
 
         Returns:
-            配置值
+            配置值副本
         """
         keys = key_path.split(".")
-        value = self._config
+        value: Any = self._config
         for k in keys:
             if isinstance(value, dict) and k in value:
                 value = value[k]
             else:
-                return default
-        return value
+                return deepcopy(default)
+        return deepcopy(value)
 
     def get_vehicle(self, key: str | None = None, default: Any = None) -> Any:
-        """获取当前车型配置"""
+        """获取当前车型配置副本。"""
         vehicle = self._config.get("current_vehicle", {})
         if key is None:
-            return vehicle
-        return vehicle.get(key, default)
+            return deepcopy(vehicle)
+        return deepcopy(vehicle.get(key, default))
 
     def set(self, key_path: str, value: Any) -> None:
         """
@@ -122,11 +109,16 @@ class ConfigManager:
         d = self._config
         for k in keys[:-1]:
             d = d.setdefault(k, {})
-        d[keys[-1]] = value
+        d[keys[-1]] = deepcopy(value)
 
     @property
     def raw(self) -> dict[str, Any]:
-        return self._config
+        """返回配置快照，调用方修改该对象不会影响管理器内部状态。"""
+        return deepcopy(self._config)
+
+    def snapshot(self) -> dict[str, Any]:
+        """返回当前配置快照，供报告或调试使用。"""
+        return self.raw
 
     # ---- 内部方法 ----
     @staticmethod
@@ -141,18 +133,15 @@ class ConfigManager:
 
     @staticmethod
     def _deep_merge(base: dict, override: dict) -> None:
-        """
-        深度合并 override 到 base（原地修改 base）。
-        为避免外部意外修改内部状态，调用前应做深拷贝。
-        """
+        """深度合并 override 到 base（原地修改 base）。"""
         for k, v in override.items():
             if k in base and isinstance(base[k], dict) and isinstance(v, dict):
                 ConfigManager._deep_merge(base[k], v)
             else:
-                base[k] = v
+                base[k] = deepcopy(v)
 
     def _apply_env_overrides(self) -> None:
-        """用 ATF_ 前缀的环境变量覆盖配置"""
+        """用 ATF_ 前缀的环境变量覆盖配置。"""
         prefix = "ATF_"
         for key, value in os.environ.items():
             if key.startswith(prefix):
@@ -164,7 +153,6 @@ class ConfigManager:
                 d[keys[-1]] = value
 
     def reset(self) -> None:
-        """重置配置（用于测试）"""
+        """重置配置（用于测试）。"""
         self._config = {}
         self._loaded = False
-        self._initialized = False
